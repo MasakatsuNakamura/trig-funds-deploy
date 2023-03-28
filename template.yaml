@@ -76,6 +76,7 @@ Resources:
               Resource: 
                 - !Sub 'arn:aws:s3:::${BucketName}/*'
                 - !Sub 'arn:aws:s3:::${BucketName}'
+        - arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

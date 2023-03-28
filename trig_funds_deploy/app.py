@@ -10,7 +10,8 @@ def build_query(params):
   return('&'.join([f"{k}={v}" for k, v in params.items()]))
 
 def rerun_workflow(branch):
-  token = os.environ('GITHUB_TOKEN')
+  ssm = boto3.client('ssm')
+  token = ssm.get_parameter(Name='/TASUKI_FUNDS/GITHUB_TOKEN', WithDecryption=True)['Parameter']['Value']
   owner = "TASUKI-Corporation"
   repo = "tasuki-funds"
   base_url = f"https://api.github.com/repos/{owner}/{repo}/actions/runs"
