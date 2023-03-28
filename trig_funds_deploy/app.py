@@ -32,7 +32,7 @@ def rerun_workflow(branch):
     run = res_json['workflow_runs'][0]
     response = requests.post(f"{base_url}/{run['id']}/rerun", headers=headers)
 
-    if response.statu_code == 201:
+    if response.status_code == 201:
       print(f"INFO: {branch}のワークフローを再実行しました")
     else:
       print(f"ERROR: {branch}のワークフローの再実行に失敗しました")
@@ -49,8 +49,8 @@ def lambda_handler(event, context):
 
     if len(version_list) > 1:
       latest_version_id = version_list[1]['VersionId']
-      previous_version = yaml.load(s3.get_object(Bucket=bucket, Key=key, VersionId=latest_version_id)['Body'])
-      current_version = yaml.load(s3.get_object(Bucket=bucket, Key=key)['Body'])
+      previous_version = yaml.safe_load(s3.get_object(Bucket=bucket, Key=key, VersionId=latest_version_id)['Body'])
+      current_version = yaml.safe_load(s3.get_object(Bucket=bucket, Key=key)['Body'])
       for stage in current_version:
         if current_version[stage] != previous_version[stage]:
           branch = 'master' if stage == 'production' else stage
